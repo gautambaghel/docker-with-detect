@@ -1,0 +1,26 @@
+apiVersion: v1
+kind: Pod
+metadata:
+    name: docker-with-detect
+spec:
+    containers:
+      - name: docker-with-detect
+        image: gautambaghel/docker-with-detect:latest
+        command: ['docker', 'run', '-p', '80:80', 'httpd:latest']
+        resources:
+            requests:
+                cpu: 10m
+                memory: 256Mi
+        volumeMounts:
+          - name: docker-sock
+            mountPath: /var/run
+          - name: blackduck-shared-dir
+            mountPath: /opt/blackduck/shared
+    volumes:
+      - name: docker-sock
+        hostPath:
+            path: /var/run
+      - name: blackduck-shared-dir
+        hostPath:
+          path: /opt/blackduck/shared
+          type: DirectoryOrCreate
